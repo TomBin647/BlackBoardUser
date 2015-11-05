@@ -131,7 +131,7 @@
     
     AVAssetImageGenerator * generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:asset1];
     
-    generator.appliesPreferredTrackTransform = YES;
+    generator.appliesPreferredTrackTransform = YES;//视频方向
     generator.maximumSize = CGSizeMake(640, 640);
 
     NSError * error = nil;
@@ -197,8 +197,11 @@
     [exportSession setShouldOptimizeForNetworkUse:YES];
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
        
-        if (exportSession.status == AVAssetExportSessionStatusCompleted) {
+        if (exportSession.status ==AVAssetExportSessionStatusExporting) {
+            NSLog(@"完成了:%f",exportSession.progress);
+        } else if (exportSession.status == AVAssetExportSessionStatusCompleted) {
             scallback();
+            
         } else {
             fcallback(exportSession.error);
         }
