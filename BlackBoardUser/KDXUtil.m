@@ -108,6 +108,7 @@
 
     NSLog(@"%@",vpath);
     NSLog(@"%@",apath);
+    //创建音轨  视轨
     AVURLAsset * asset1 = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:vpath] options:nil];
     AVURLAsset * asset2 = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:apath] options:nil];
 
@@ -124,6 +125,9 @@
     
     NSLog(@"%@", videoAssetTrack);
     NSLog(@"%@", audioAssetTrack);
+    
+    
+    //对视频进行截图  用作之后用
     
     AVAssetImageGenerator * generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:asset1];
     
@@ -147,7 +151,7 @@
     
     CGImageRelease(img);
     
-    
+    //合成视频
     AVMutableComposition      * composition;
     AVMutableCompositionTrack * videoCompositionTrack;
     AVMutableCompositionTrack * audioCompositionTrack;
@@ -161,7 +165,7 @@
     [audioCompositionTrack insertTimeRange:audioAssetTrack.timeRange ofTrack:audioAssetTrack atTime:kCMTimeZero error:nil];
     
     
-    
+    //创建视频输出源
     AVAssetExportSession * exportSession = [AVAssetExportSession exportSessionWithAsset:composition presetName:AVAssetExportPresetPassthrough];
     
 //    AVMutableVideoComposition * videoComposition = [AVMutableVideoComposition videoComposition];
@@ -186,7 +190,9 @@
 //    [exportSession setTimeRange:videoAssetTrack.timeRange];
     
     NSLog(@"%@", outpuntPath);
+    //输出视频类型
     [exportSession setOutputFileType:AVFileTypeMPEG4];
+    //存入文件
     [exportSession setOutputURL:[NSURL fileURLWithPath:outpuntPath]];
     [exportSession setShouldOptimizeForNetworkUse:YES];
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
